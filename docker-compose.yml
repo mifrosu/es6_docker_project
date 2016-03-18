@@ -1,0 +1,25 @@
+project:
+  image: mos_dev_js_node:ruby2.2
+  ports:
+    - "localhost:8080:80"
+  volumes:
+    - ./project:/u/project
+    # - /u/projects/local_config/tofumine_config:/u/config
+  # links:
+  #   - projmysql:db_mysql
+  # extra_hosts:
+  #   - "myhost.blah.net:10.0.7.61"
+  #   - "blh-docker.blah.net:127.0.0.1"
+  environment:
+    #   # Allow GBP symbol as env variable
+     - LANG=C.UTF-8
+
+# projmysql:
+#   image: mysql:5.6.27
+#   ports:
+#     - "localhost:3310:3306"
+#   volumes:
+#     - /u/data_docker/mysql_home:/var/lib/mysql
+#   environment:
+#     - MYSQL_ROOT_PASSWORD=blah
+
