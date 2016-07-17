@@ -19,12 +19,12 @@ CMD ["/sbin/my_init"]
 
 # ...put your own build instructions here...
 
-# Replace node with node 5.x
-RUN echo 'deb https://deb.nodesource.com/node_5.x trusty main' > /etc/apt/sources.list.d/nodesource.list
-RUN echo 'deb-src https://deb.nodesource.com/node_5.x trusty main' >> /etc/apt/sources.list.d/nodesource.list
+# Replace node with node 6.x
+RUN echo 'deb https://deb.nodesource.com/node_6.x trusty main' > /etc/apt/sources.list.d/nodesource.list
+RUN echo 'deb-src https://deb.nodesource.com/node_6.x trusty main' >> /etc/apt/sources.list.d/nodesource.list
 
 # Upgrade the packages, keep old config
-RUN apt-get update && apt-get upgrade -y -o Dpkg::Options::="--force-confold"
+RUN apt-get update && apt-get upgrade -y -o Dpkg::Options::="--force-confold" && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ENV RAILS_ENV="development"
 ENV TERM=xterm
@@ -33,10 +33,10 @@ RUN locale-gen en_GB.UTF-8
 ENV LANG en_GB.UTF-8
 ENV LANGUAGE en_GB:en
 
-RUN apt-get install -y \
- mysql-client git-core curl zlib1g-dev build-essential libssl-dev \
- libreadline-dev libyaml-dev libxml2-dev \
- libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev
+# RUN apt-get install -y \
+#  mysql-client git-core curl zlib1g-dev build-essential libssl-dev \
+#  libreadline-dev libyaml-dev libxml2-dev \
+#  libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev
 
 ## Container directory for volume link
 RUN mkdir /u && \
@@ -52,7 +52,7 @@ RUN echo "gem: --no-ri --no-rdoc" > ~/.gemrc && gem install bundler
 ## the image source
 # COPY ./app_files /home/app/app_files/
 
-RUN adduser --uid 1000 --disabled-password rubyapps
+RUN adduser --uid 1000 --disabled-password appuser
 
 WORKDIR /u/project
 
@@ -60,4 +60,4 @@ WORKDIR /u/project
 RUN npm install -g gulp eslint
 
 # Clean up APT
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+# RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
