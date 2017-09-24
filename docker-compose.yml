@@ -1,7 +1,7 @@
 project:
-  image: mos_dev_js_node:ruby2.2
+  image: mos_dev_js_node:ruby2.4
   ports:
-    - "localhost:8080:80"
+    - "127.0.0.1:8080:80"
   volumes:
     - ./project:/u/project
     # - /u/projects/local_config/tofumine_config:/u/config

@@ -1,16 +1,8 @@
-# Use phusion/passenger-full as base image. To make your builds reproducible, make
-# sure you lock down to a specific version, not to `latest`!
 # See https://github.com/phusion/passenger-docker/blob/master/Changelog.md for
 # a list of version numbers.
 #FROM phusion/passenger-full:<VERSION>
 # Or, instead of the 'full' variant, use one of these:
-#FROM phusion/passenger-ruby19:<VERSION>
-#FROM phusion/passenger-ruby20:<VERSION>
-#FROM phusion/passenger-ruby21:<VERSION>
-FROM phusion/passenger-ruby22:0.9.17
-#FROM phusion/passenger-jruby90:<VERSION>
-#FROM phusion/passenger-nodejs:<VERSION>
-#FROM phusion/passenger-customizable:<VERSION>
+FROM phusion/passenger-ruby24:0.9.24
 
 # Set correct environment variables.
 
@@ -20,8 +12,9 @@ CMD ["/sbin/my_init"]
 # ...put your own build instructions here...
 
 # Replace node with node 6.x
-RUN echo 'deb https://deb.nodesource.com/node_6.x trusty main' > /etc/apt/sources.list.d/nodesource.list
-RUN echo 'deb-src https://deb.nodesource.com/node_6.x trusty main' >> /etc/apt/sources.list.d/nodesource.list
+RUN echo 'deb https://deb.nodesource.com/node_6.x xenial main' > /etc/apt/sources.list.d/nodesource.list && \
+echo 'deb-src https://deb.nodesource.com/node_6.x xenial main' >> /etc/apt/sources.list.d/nodesource.list
+RUN curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
 
 # Upgrade the packages, keep old config
 RUN apt-get update && apt-get upgrade -y -o Dpkg::Options::="--force-confold" && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -52,12 +45,13 @@ RUN echo "gem: --no-ri --no-rdoc" > ~/.gemrc && gem install bundler
 ## the image source
 # COPY ./app_files /home/app/app_files/
 
-RUN adduser --uid 1000 --disabled-password appuser
+RUN adduser --uid 1000 --disabled-password --gecos "" appuser
 
 WORKDIR /u/project
 
-# Install global gulp
+# Install node and global gulp
+RUN apt-get update && apt-get install -y nodejs && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 RUN npm install -g gulp eslint
 
 # Clean up APT
-# RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
