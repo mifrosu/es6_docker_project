@@ -1,5 +1,5 @@
 NAME = mos_dev_js_node
-VERSION = ruby2.4
+VERSION = ruby2.5
 
 .PHONY: all build
 

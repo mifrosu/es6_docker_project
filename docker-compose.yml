@@ -1,5 +1,5 @@
 project:
-  image: mos_dev_js_node:ruby2.4
+  image: mos_dev_js_node:ruby2.5
   ports:
     - "127.0.0.1:8080:80"
   volumes:
